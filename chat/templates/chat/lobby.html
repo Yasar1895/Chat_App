@@ -1,0 +1,47 @@
+{% extends 'chat/base.html' %}
+{% block title %}Lobby{% endblock %}
+{% block content %}
+<h2>Lobby</h2>
+
+<section>
+    <h3>Create room</h3>
+    <form id="create-room-form" method="post" action="{% url 'chat:create_room' %}">
+        {% csrf_token %}
+        <input name="name" id="room-name-input" placeholder="Room name (e.g. general or pm_user1_user2)" required>
+        <label><input type="checkbox" name="is_private"> Private</label>
+        <button type="submit">Create</button>
+    </form>
+</section>
+
+<section>
+    <h3>Public Rooms</h3>
+    <ul id="rooms-list">
+        {% for r in rooms %}
+            <li><a href="{% url 'chat:room' r.name %}">{{ r.name }}</a></li>
+        {% empty %}
+            <li>No rooms yet</li>
+        {% endfor %}
+    </ul>
+</section>
+
+<script>
+document.getElementById('create-room-form').addEventListener('submit', async function(e){
+    e.preventDefault();
+    const form = e.target;
+    const data = new FormData(form);
+    const res = await fetch(form.action, {
+        method: 'POST',
+        headers: {
+            'X-CSRFToken': window.CSRF_TOKEN,
+        },
+        body: data
+    });
+    const j = await res.json();
+    if (j.room) {
+        window.location.href = `/${j.room}/`;
+    } else {
+        alert('Error creating room');
+    }
+});
+</script>
+{% endblock %}
