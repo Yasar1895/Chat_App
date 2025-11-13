@@ -3,7 +3,7 @@ from pathlib import Path
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-SECRET_KEY = os.environ.get('SECRET_KEY', 'dev-secret-key-change-me')
+SECRET_KEY = os.environ.get('SECRET_KEY', '=y(ec+lvl2one#pzsw3)ojw@@zq3%vnuq+vreldch#h(az0a6c')
 DEBUG = os.environ.get('DEBUG', 'True') == 'True'
 
 ALLOWED_HOSTS = os.environ.get('ALLOWED_HOSTS', '127.0.0.1,localhost').split(',')
