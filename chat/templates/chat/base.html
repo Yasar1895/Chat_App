@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>{% block title %}Realtime Chat{% endblock %}</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="stylesheet" href="{% static 'chat/css/style.css' %}">
+</head>
+<body>
+    <nav>
+        {% if user.is_authenticated %}
+            <span>Logged in as {{ user.username }}</span> |
+            <a href="{% url 'chat:lobby' %}">Lobby</a> |
+            <a href="{% url 'chat:logout' %}">Logout</a>
+        {% else %}
+            <a href="{% url 'chat:login' %}">Login</a> |
+            <a href="{% url 'chat:register' %}">Register</a>
+        {% endif %}
+    </nav>
+    <main>
+        {% block content %}{% endblock %}
+    </main>
+
+    <script>
+        // Provide CSRF token to JS
+        function getCookie(name) {
+            let cookieValue = null;
+            if (document.cookie && document.cookie !== '') {
+                const cookies = document.cookie.split(';');
+                for (let i = 0; i < cookies.length; i++) {
+                    const c = cookies[i].trim();
+                    if (c.substring(0, name.length + 1) === (name + '=')) {
+                        cookieValue = decodeURIComponent(c.substring(name.length + 1));
+                        break;
+                    }
+                }
+            }
+            return cookieValue;
+        }
+        window.CSRF_TOKEN = getCookie('csrftoken');
+    </script>
+    {% block scripts %}{% endblock %}
+</body>
+</html>
